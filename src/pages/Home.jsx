@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
+  selectFilter,
   setCategoryId,
   setCurrentPage,
   //setFilters,
@@ -13,19 +14,15 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination/index";
-import { SearchContext } from "../App";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { items, status } = useSelector((state) => state.pizza);
-  const { categoryId, sort, currentPage } = useSelector(
-    (state) => state.filter
-  );
+  const { items, status } = useSelector(selectPizzaData);
+  const { categoryId, sort, currentPage, searchValue } =
+    useSelector(selectFilter);
   const sortType = sort.sortProperty;
-
-  const { searchValue } = React.useContext(SearchContext);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
@@ -85,9 +82,11 @@ const Home = () => {
     <Skeleton key={index} />
   ));
 
-  const pizzas = items.map((obj) => {
-    return <PizzaBlock key={obj.id} {...obj} />;
-  });
+  const pizzas = items.map((obj) => (
+    //<Link  to={`/pizza/${obj.id}`}>
+    <PizzaBlock key={obj.id} {...obj} />
+    //</Link>
+  ));
   return (
     <div className="container">
       <div className="content__top">

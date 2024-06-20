@@ -2,11 +2,13 @@ import React from "react";
 import debounce from "lodash.debounce";
 
 import styles from "./search.module.scss";
-import { SearchContext } from "../../App";
+import { useDispatch } from "react-redux";
+import { setSearchValue } from "../../redux/slices/filterSlice";
 
 const Search = () => {
+  const dispatch = useDispatch();
+
   const [value, setValue] = React.useState("");
-  const { setSearchValue } = React.useContext(SearchContext);
   const inputRef = React.useRef();
 
   const onChangeInput = (event) => {
@@ -17,14 +19,14 @@ const Search = () => {
   // eslint-disable-next-line
   const updateSearchValue = React.useCallback(
     debounce((str) => {
-      setSearchValue(str);
+      dispatch(setSearchValue(str));
     }, 250),
     []
   );
 
   const onClickClear = () => {
+    dispatch(setSearchValue(""));
     setValue("");
-    setSearchValue("");
     inputRef.current.focus();
   };
 
