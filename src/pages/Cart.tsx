@@ -6,11 +6,15 @@ import CartIem from "../components/CartItem";
 import { clearItems, selectCart } from "../redux/slices/cartSlice";
 import CartEmpty from "../components/CartEmpty";
 
-const Cart = () => {
+interface Item {
+  count: number;
+}
+
+const Cart: React.FC = () => {
   const dispatch = useDispatch();
   const { items, totalPrice } = useSelector(selectCart);
 
-  const cartNum = (array) => {
+  const cartNum = (array: Item[]) => {
     if (array.length !== 0) {
       let s = 0;
       for (let i = 0; i < array.length; i++) {
@@ -107,7 +111,7 @@ const Cart = () => {
           </div>
         </div>
         <div className="content__items">
-          {items.map((item) => (
+          {items.map((item: any) => (
             <CartIem key={item.id} {...item} />
           ))}
         </div>

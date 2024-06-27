@@ -25,7 +25,7 @@ const cartSlice = createSlice({
     },
     removeItem(state, action) {
       const findItem = state.items.find((obj) => obj.id === action.payload);
-      state.totalPrice = state.totalPrice - findItem.price;
+      state.totalPrice = state.totalPrice - findItem.price * findItem.count;
       state.items = state.items.filter((obj) => obj.id !== action.payload);
     },
     clearItems(state) {

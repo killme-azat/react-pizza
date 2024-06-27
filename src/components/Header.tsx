@@ -5,6 +5,10 @@ import Search from "./Search/index";
 import logo from "../assets/img/pizza-logo.svg";
 import { selectCart } from "../redux/slices/cartSlice";
 
+interface Item {
+  count: number;
+}
+
 function Header() {
   const { items, totalPrice } = useSelector(selectCart);
 
@@ -12,7 +16,7 @@ function Header() {
 
   // const totNum = items.reduce((sum, item) => item.count +sum, 0 )
 
-  const cartNum = (array) => {
+  const cartNum = (array: Array<Item>) => {
     if (array.length !== 0) {
       let s = 0;
       for (let i = 0; i < array.length; i++) {
