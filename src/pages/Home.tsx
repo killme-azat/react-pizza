@@ -1,7 +1,7 @@
 import React from "react";
-import qs from "qs";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+//import qs from "qs";
+//import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import {
   selectFilter,
@@ -14,11 +14,16 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import Pagination from "../components/Pagination/index";
-import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
+import {
+  Status,
+  fetchPizzas,
+  selectPizzaData,
+} from "../redux/slices/pizzaSlice";
+import { useAppDispatch } from "../redux/store";
 
 const Home: React.FC = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  //const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { items, status } = useSelector(selectPizzaData);
   const { categoryId, sort, currentPage, searchValue } =
     useSelector(selectFilter);
@@ -52,13 +57,12 @@ const Home: React.FC = () => {
     const search = searchValue ? `search=${searchValue}` : "";
 
     dispatch(
-      // @ts-ignore
       fetchPizzas({
         category,
         sortBy,
         order,
         search,
-        currentPage,
+        currentPage: String(currentPage),
       })
     );
 
@@ -70,14 +74,14 @@ const Home: React.FC = () => {
     // eslint-disable-next-line
   }, [categoryId, sortType, searchValue, currentPage]);
 
-  React.useEffect(() => {
-    const queryString = qs.stringify({
-      sortType,
-      categoryId,
-      currentPage,
-    });
-    navigate(`?${queryString}`); // eslint-disable-next-line
-  }, [categoryId, sortType, currentPage]);
+  // React.useEffect(() => {
+  //   const queryString = qs.stringify({
+  //     sortType,
+  //     categoryId,
+  //     currentPage,
+  //   });
+  //   navigate(`?${queryString}`); // eslint-disable-next-line
+  // }, [categoryId, sortType, currentPage]);
 
   const skeletons = [...new Array(4)].map((_, index) => (
     <Skeleton key={index} />
@@ -106,7 +110,7 @@ const Home: React.FC = () => {
         </div>
       ) : (
         <div className="content__items">
-          {status === "loading" ? skeletons : pizzas}
+          {status === Status.LOADING ? skeletons : pizzas}
         </div>
       )}
 
